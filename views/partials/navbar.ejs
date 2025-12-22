@@ -7,8 +7,28 @@
     <div id="nav" class="collapse navbar-collapse">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <% if (currentUser) { %>
-          <li class="nav-item"><a href="/play/number" class="nav-link">Number Game</a></li>
-          <li class="nav-item"><a href="/play/color" class="nav-link">Color Game</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle"
+              href="#"
+              id="playDropdown"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false">
+              Play
+            </a>
+
+            <ul class="dropdown-menu bg-black border-warning" aria-labelledby="playDropdown">
+              <li>
+                <a class="dropdown-item" href="/play/number">Number Game</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="/play/color">Color Game</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item"><a href="/play/myBets" class="nav-link">Result</a></li>
+          <li class="nav-item"><a href="/play/myBets" class="nav-link">FAQs</a></li>
+          <li class="nav-item"><a href="/play/myBets" class="nav-link">Rules</a></li>
           <li class="nav-item"><a href="/play/myBets" class="nav-link">My Bets</a></li>
           <% if (currentUser.is_admin) { %>
             <li class="nav-item"><a href="/admin" class="nav-link text-warning">Admin</a></li>

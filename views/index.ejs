@@ -20,63 +20,105 @@
     .game-card { transition: transform .15s ease, box-shadow .15s ease; }
     .game-card:hover { transform: translateY(-6px); box-shadow: 0 8px 30px rgba(0,0,0,0.5); }
     .badge-players { font-size: .8rem; }
+
+    .custom-carousel {
+    max-height: 420px;
+    overflow: hidden;
+}
+
+.carousel-img {
+    width: 100%;
+    height: 420px;
+    object-fit: cover;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .carousel-img {
+        height: 260px;
+    }
+}
+
+/* RULES MODAL CONTENT */
+.rules-content {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: #dcdcdc;
+}
+
+.rules-content h6 {
+  color: #ffc107;
+  font-weight: 600;
+  margin-top: 1rem;
+}
+
+.rules-content ul {
+  padding-left: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.rules-content li {
+  margin-bottom: 0.4rem;
+}
+
+.rules-content .rule-block {
+  background: rgba(255,255,255,0.03);
+  border-left: 3px solid #ffc107;
+  padding: 12px 14px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+}
+
+.badge-timer {
+  font-size: 0.75rem;
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: rgba(0,0,0,0.6);
+  border: 1px solid rgba(255,193,7,0.4);
+  color: #ffc107;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+}
+
+/* Last 5 minutes warning */
+.badge-timer.danger {
+  color: #ff4d4f;
+  border-color: #ff4d4f;
+  background: rgba(255,77,79,0.08);
+}
+
+
+
   </style>
 </head>
 <body class="bg-dark text-light">
 
-  <!-- HERO + Carousel -->
-  <header class="hero text-center text-white py-5">
-    <div class="container">
-      <h1 class="display-4 fw-bold text-warning mb-3">Welcome to Galaxy Lottery</h1>
-      <p class="lead text-secondary mb-4">Play our Number & Color games. Simple rules, instant excitement.</p>
-      <div class="d-flex justify-content-center gap-2">
-        <% if (!currentUser) { %>
-          <a href="/register" class="btn btn-warning btn-lg">Get Started</a>
-          <a href="/login" class="btn btn-outline-light btn-lg">Login</a>
-        <% } else { %>
-          <a href="/play/number" class="btn btn-warning btn-lg">Play Number Game</a>
-          <a href="/play/color" class="btn btn-outline-info btn-lg">Play Color Game</a>
-        <% } %>
-      </div>
+<div id="carouselExampleIndicators" 
+     class="carousel slide custom-carousel" 
+     data-ride="carousel"
+     data-interval="3000"
+     data-pause="false">
 
-      <!-- Carousel (in hero) -->
-      <div id="promoCarousel" class="carousel slide mt-5" data-bs-ride="carousel">
-        <div class="carousel-indicators">
-          <button type="button" data-bs-target="#promoCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-          <button type="button" data-bs-target="#promoCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-          <button type="button" data-bs-target="#promoCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
-        </div>
-        <div class="carousel-inner rounded-3 overflow-hidden shadow-lg">
-          <div class="carousel-item active">
-            <div class="carousel-caption d-none d-md-block text-start">
-              <h5 class="text-warning">Number Game — Pick & Win</h5>
-              <p class="text-light">Choose your lucky numbers and see instant results.</p>
-            </div>
-          </div>
-          <div class="carousel-item">
-            <div class="carousel-caption d-none d-md-block text-start">
-              <h5 class="text-warning">Color Game — Simple & Fast</h5>
-              <p class="text-light">Pick a color, place a bet, and wait for the live draw.</p>
-            </div>
-          </div>
-          <div class="carousel-item">
-            <div class="carousel-caption d-none d-md-block text-start">
-              <h5 class="text-warning">Daily Prizes & Jackpots</h5>
-              <p class="text-light">Multiple daily draws give you more chances to win.</p>
-            </div>
-          </div>
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#promoCarousel" data-bs-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#promoCarousel" data-bs-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Next</span>
-        </button>
-      </div>
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="/assets/lottery_img1.jpeg" class="carousel-img" alt="Slide 1">
     </div>
-  </header>
+    <div class="carousel-item">
+      <img src="/assets/lottery_img2.jpeg" class="carousel-img" alt="Slide 2">
+    </div>
+    <div class="carousel-item">
+      <img src="/assets/lottery_img3.jpeg" class="carousel-img" alt="Slide 3">
+    </div>
+  </div>
+
+  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+    <span class="carousel-control-prev-icon"></span>
+  </a>
+
+  <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+    <span class="carousel-control-next-icon"></span>
+  </a>
+</div>
 
   <!-- GAMES GRID -->
   <section class="container py-5">
@@ -92,22 +134,25 @@
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-start mb-3">
               <div>
-                <h5 class="card-title text-warning">Number Game</h5>
-                <p class="card-text text-light small">Pick 1-3 numbers and win based on the draw. Fast results.</p>
+                <h5 class="card-title text-warning">Sprint 70x</h5>
+                <p class="card-text text-light small">Choose one (1) number between 1 and 100.</p>
               </div>
-              <span class="badge bg-dark text-light badge-players"><i class="bi bi-people-fill"></i> 2.1k players</span>
+              <span class="badge badge-timer" data-duration="2" id="timer-2h">
+  ⏳ <span class="time">02:00:00</span>
+</span>
+
             </div>
 
             <ul class="list-unstyled text-muted small mb-3">
-              <li>• Quick rounds (every 10 minutes)</li>
-              <li>• Choose 1-3 numbers</li>
+              <li>•A new draw occurs every 2 hours (12 times daily) starting from 00:00 UTC.</li>
+              <li>• Choose 1-100 numbers</li>
               <li>• Instant payout</li>
             </ul>
 
             <div class="d-flex gap-2">
               <a href="/play/number" class="btn btn-warning flex-grow-1">Start Game</a>
-              <button class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#rulesModal"
-                data-title="Number Game Rules" data-body="Choose 1-3 numbers. Ticket cost varies by numbers chosen. Matching numbers win prizes calculated from the pool. Rounds finish every 10 minutes.">View Rules</button>
+              <button class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#rulesModal1"
+                data-title="Number Game Rules">View Rules</button>
             </div>
           </div>
         </div>
@@ -119,11 +164,12 @@
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-start mb-3">
               <div>
-                <h5 class="card-title text-warning">Number 50 Game</h5>
+                <h5 class="card-title text-warning">Mid-Day 40x</h5>
                 <p class="card-text text-light small">Pick 1-50 numbers and win based on the draw. Fast results.</p>
               </div>
-              <span class="badge bg-dark text-light badge-players"><i class="bi bi-people-fill"></i> 2.1k players</span>
-            </div>
+<span class="badge badge-timer" data-duration="8" id="timer-8h">
+  ⏳ <span class="time">08:00:00</span>
+</span>            </div>
 
             <ul class="list-unstyled text-muted small mb-3">
               <li>• Quick rounds (every 2 hours)</li>
@@ -133,8 +179,8 @@
 
             <div class="d-flex gap-2">
               <a href="/play/numberGame2" class="btn btn-warning flex-grow-1">Start Game</a>
-              <button class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#rulesModal"
-                data-title="Number Game Rules" data-body="Choose 1-3 numbers. Ticket cost varies by numbers chosen. Matching numbers win prizes calculated from the pool. Rounds finish every 10 minutes.">View Rules</button>
+              <button class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#rulesModal2"
+                data-title="Number Game Rules">View Rules</button>
             </div>
           </div>
         </div>
@@ -146,8 +192,8 @@
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-start mb-3">
               <div>
-                <h5 class="card-title text-warning">Color Game</h5>
-                <p class="card-text text-light small">Pick a color and win if the draw lands on it. Super simple.</p>
+                <h5 class="card-title text-warning">Daily Grand 10k</h5>
+                <p class="card-text text-light small">Choose one (1) number between 1 and 999.</p>
               </div>
               <span class="badge bg-dark text-light badge-players">1.8k players</span>
             </div>
@@ -160,15 +206,15 @@
 
             <div class="d-flex gap-2">
               <a href="/play/color" class="btn btn-warning flex-grow-1">Start Game</a>
-              <button class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#rulesModal"
-                data-title="Color Game Rules" data-body="Pick a color (Red/Green/Blue/Yellow). Bets are placed before the draw. If the drawn color matches your pick you win according to the odds displayed.">View Rules</button>
+              <button class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#rulesModal3"
+                data-title="Color Game Rules">View Rules</button>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Quick Bet Card -->
-      <div class="col-md-6 col-lg-4">
+      <!-- <div class="col-md-6 col-lg-4">
         <div class="card game-card h-100 bg-secondary border-0">
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-start mb-3">
@@ -183,12 +229,12 @@
 
             <div class="d-flex gap-2">
               <a href="/play/quick" class="btn btn-warning flex-grow-1">Start Game</a>
-              <button class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#rulesModal"
-                data-title="Quick Bet Rules" data-body="Quick bets use saved presets. Make sure you have sufficient balance. Presets can be managed in your profile.">View Rules</button>
+              <button class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#rulesModal3"
+                data-title="Quick Bet Rules">View Rules</button>
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
 
       <!-- Upcoming/Promotions Card -->
       <div class="col-12">
@@ -206,28 +252,267 @@
   </section>
 
   <!-- Rules Modal (single modal that is reused) -->
-  <div class="modal fade" id="rulesModal" tabindex="-1" aria-labelledby="rulesModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-      <div class="modal-content bg-dark text-light border-0">
-        <div class="modal-header border-0">
-          <h5 class="modal-title text-warning" id="rulesModalLabel">Rules</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body" id="rulesModalBody">
-          <!-- Filled dynamically -->
-        </div>
-        <div class="modal-footer border-0">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <a href="#" id="rulesStartBtn" class="btn btn-warning">Start Game</a>
-        </div>
+<div class="modal fade" id="rulesModal1" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content bg-dark text-light border-0 shadow-lg">
+
+      <div class="modal-header border-bottom border-secondary">
+        <h5 class="modal-title text-warning fw-semibold" id="rulesModalLabel">
+          Game Rules
+        </h5>
+        <button type="button"
+                class="btn-close btn-close-white"
+                data-bs-dismiss="modal"></button>
       </div>
+
+      <div class="modal-body">
+        <div class="rules-content">
+
+  <div class="rule-meta">
+    <span class="badge bg-warning text-dark">Version V1.0.0</span>
+    <span class="badge bg-secondary">Sprint 70x</span>
+  </div>
+
+  <h6>Frequency & Sales Schedule</h6>
+  <ul>
+    <li><strong>Live Draw:</strong> Every 2 hours (12 times daily) starting from 00:00 UTC</li>
+    <li><strong>Sales Suspension:</strong> 5 minutes before each draw</li>
+    <li><strong>Sales Period:</strong> Opens immediately after previous result</li>
+  </ul>
+
+  <h6>How to Play</h6>
+  <p>Choose one (1) number between <strong>1 and 100</strong>. Entry can be manual.</p>
+
+  <h6>Winning Conditions</h6>
+  <p>If your selected number matches the winning number of the Draw ID, you win.</p>
+
+  <h6>Prize Structure</h6>
+  <div class="rule-highlight">
+    <p><strong>70× Multiplier</strong></p>
+    <p>1 USDT → <strong>70 USDT</strong></p>
+    <p>100 USDT → <strong>7,000 USDT</strong></p>
+  </div>
+
+  <h6>Odds of Winning</h6>
+  <p>1 in 100 (<strong>1.00%</strong>)</p>
+
+  <h6>Additional Details</h6>
+  <ul>
+    <li>Fixed-rate payout</li>
+    <li>Each ticket is independent</li>
+    <li>Multiple winners receive full payout</li>
+    <li>Entry price: 1–100 USDT</li>
+    <li>Max 5 tickets per user per draw</li>
+  </ul>
+
+</div>
+
+      </div>
+
+      <div class="modal-footer border-top border-secondary">
+        <button class="btn btn-outline-light" data-bs-dismiss="modal">
+          Close
+        </button>
+        <a href="#" id="rulesStartBtn" class="btn btn-warning fw-semibold">
+          Start Game
+        </a>
+      </div>
+
     </div>
   </div>
+</div>
+
+  <!-- Rules Modal (single modal that is reused) -->
+<div class="modal fade" id="rulesModal2" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content bg-dark text-light border-0 shadow-lg">
+
+      <div class="modal-header border-bottom border-secondary">
+        <h5 class="modal-title text-warning fw-semibold" id="rulesModalLabel">
+          Game Rules
+        </h5>
+        <button type="button"
+                class="btn-close btn-close-white"
+                data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="rules-content">
+
+  <!-- Meta -->
+  <div class="rule-meta">
+    <span class="badge bg-warning text-dark">Version V1.0.0</span>
+    <span class="badge bg-secondary">Mid-Day 40x</span>
+    <span class="badge bg-success">RTP 80%</span>
+  </div>
+
+  <!-- Schedule -->
+  <h6>Frequency & Sales Schedule</h6>
+  <ul>
+    <li><strong>Live Draw:</strong> Every 8 hours at 00:00, 08:00, and 16:00 UTC</li>
+    <li><strong>Sales Suspension:</strong> 15 minutes before each draw</li>
+    <li><strong>Sales Period:</strong> Tickets available except during suspension</li>
+  </ul>
+
+  <!-- How to Play -->
+  <h6>How to Play</h6>
+  <p>
+    Choose one (1) number between <strong>1 and 50</strong>.
+  </p>
+
+  <!-- Winning Conditions -->
+  <h6>Winning Conditions</h6>
+  <p>
+    The ticket wins if the chosen number matches the single winning number
+    drawn for the 8-hour cycle.
+  </p>
+
+  <!-- Prize -->
+  <h6>Prize Structure</h6>
+  <div class="rule-highlight">
+    <p class="mb-1"><strong>40× Multiplier</strong></p>
+    <p class="mb-0">2 USDT → <strong>80 USDT</strong></p>
+    <p>200 USDT → <strong>8,000 USDT</strong></p>
+  </div>
+
+  <!-- Odds -->
+  <h6>Odds of Winning</h6>
+  <p>
+    1 in 50 (<strong>2.00%</strong>)
+  </p>
+
+  <!-- Special -->
+  <h6>Special Feature</h6>
+  <p>
+    This game offers the <strong>highest statistical probability</strong> of winning
+    (2%) among all available game tiers.
+  </p>
+
+  <!-- Limits -->
+  <h6>Limits & Pricing</h6>
+  <ul>
+    <li>Entry price: <strong>2 – 200 USDT</strong></li>
+    <li>Maximum 5 tickets per user per draw</li>
+  </ul>
+
+</div>
+
+      </div>
+
+      <div class="modal-footer border-top border-secondary">
+        <button class="btn btn-outline-light" data-bs-dismiss="modal">
+          Close
+        </button>
+        <a href="#" id="rulesStartBtn" class="btn btn-warning fw-semibold">
+          Start Game
+        </a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+  <!-- Rules Modal (single modal that is reused) -->
+<div class="modal fade" id="rulesModal3" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content bg-dark text-light border-0 shadow-lg">
+
+      <div class="modal-header border-bottom border-secondary">
+        <h5 class="modal-title text-warning fw-semibold" id="rulesModalLabel">
+          Game Rules
+        </h5>
+        <button type="button"
+                class="btn-close btn-close-white"
+                data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="rules-content">
+
+  <!-- Meta -->
+  <div class="rule-meta">
+    <span class="badge bg-warning text-dark">Version V1.0.0</span>
+    <span class="badge bg-danger">Jackpot</span>
+    <span class="badge bg-success">10,000 USDT</span>
+  </div>
+
+  <!-- Schedule -->
+  <h6>Frequency & Sales Schedule</h6>
+  <ul>
+    <li><strong>Live Draw:</strong> Every day at <strong>20:00 UTC</strong></li>
+    <li><strong>Sales Suspension:</strong> 1 hour before draw (19:00 UTC)</li>
+    <li><strong>Sales Period:</strong> Tickets available 23 hours a day</li>
+  </ul>
+
+  <!-- How to Play -->
+  <h6>How to Play</h6>
+  <p>
+    Choose one (1) number between <strong>1 and 999</strong>.
+  </p>
+
+  <!-- Winning Conditions -->
+  <h6>Winning Conditions</h6>
+  <p>
+    <strong>Jackpot Win:</strong> If your number matches the draw result,
+    you win the full jackpot.
+  </p>
+
+  <!-- Prize -->
+  <h6>Prize Structure</h6>
+  <div class="rule-highlight">
+    <p class="mb-1"><strong>Jackpot Prize</strong></p>
+    <p class="mb-0">🏆 <strong>10,000 USDT</strong></p>
+  </div>
+
+  <!-- Odds -->
+  <h6>Odds of Winning</h6>
+  <p>
+    1 in 999 (<strong>≈ 0.1%</strong>)
+  </p>
+
+  <!-- Special Feature -->
+  <h6>Special Feature</h6>
+  <p>
+    The Daily Grand 10k offers a <strong>fixed jackpot</strong> that is paid in
+    full to <strong>every winner</strong>, even if multiple tickets match the
+    single winning number.
+  </p>
+
+  <!-- Limits -->
+  <h6>Limits & Pricing</h6>
+  <ul>
+    <li>Entry price: <strong>10 USDT</strong> (fixed)</li>
+    <li>Maximum <strong>10 tickets</strong> per user per draw</li>
+  </ul>
+
+</div>
+
+      </div>
+
+      <div class="modal-footer border-top border-secondary">
+        <button class="btn btn-outline-light" data-bs-dismiss="modal">
+          Close
+        </button>
+        <a href="#" id="rulesStartBtn" class="btn btn-warning fw-semibold">
+          Start Game
+        </a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 
   <%- include('partials/footer') %>
 
   <!-- Bootstrap bundle (includes Popper) -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script> -->
+  <!-- jQuery (must be first) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
 
   <script>
     // When a rules button opens the modal, populate it from data- attributes
@@ -239,7 +524,7 @@
       const startHref = button.getAttribute('data-start') || '#';
 
       document.getElementById('rulesModalLabel').innerText = title;
-      document.getElementById('rulesModalBody').innerHTML = '<p class="small text-muted">' + body + '</p>';
+      document.getElementById('rulesModalBody').innerHTML = '<p class="small">' + body + '</p>';
       document.getElementById('rulesStartBtn').setAttribute('href', startHref);
     });
 
@@ -250,5 +535,60 @@
       });
     });
   </script>
+  <script>
+  $('.carousel').carousel({
+    interval: 3000,
+    ride: 'carousel',
+    pause: false
+  });
+</script>
+<script>
+(function initCountdownTimers() {
+
+  function formatTime(ms) {
+    const totalSeconds = Math.floor(ms / 1000);
+    const h = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+    const m = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+    const s = String(totalSeconds % 60).padStart(2, '0');
+    return `${h}:${m}:${s}`;
+  }
+
+  function startTimer(badge) {
+    const hours = parseInt(badge.dataset.duration, 10);
+    const display = badge.querySelector('.time');
+
+    if (!hours || !display) return;
+
+    const DURATION = hours * 60 * 60 * 1000;
+
+    function getRemaining() {
+      const now = Date.now();
+      const elapsed = now % DURATION;
+      return DURATION - elapsed;
+    }
+
+    function tick() {
+      const remaining = getRemaining();
+      display.textContent = formatTime(remaining);
+
+      // Last 5 minutes → warning
+      if (remaining <= 5 * 60 * 1000) {
+        badge.classList.add('danger');
+      } else {
+        badge.classList.remove('danger');
+      }
+    }
+
+    tick();
+    setInterval(tick, 1000);
+  }
+
+  document.querySelectorAll('.badge-timer').forEach(startTimer);
+
+})();
+</script>
+
+
+
 </body>
 </html>
