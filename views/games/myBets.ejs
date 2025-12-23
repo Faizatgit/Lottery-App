@@ -19,6 +19,7 @@
                 <thead class="table-warning text-dark">
                   <tr>
                     <th>#</th>
+                    <th>Draw Number</th>
                     <th>Game</th>
                     <th>Choice</th>
                     <th>Amount</th>
@@ -31,20 +32,24 @@
                   <% bets.forEach((bet, index) => { %>
                     <tr>
                       <td><%= index + 1 %></td>
-
+                      <td><%= bet.draw_id %></td>
                       <!-- Game Type -->
                       <td>
                         <span class="badge bg-info">
-                          <%= bet.chosen_number ? 'Number' : 'Color' %>
+                        <% if (bet.game_type_id == 1) { %>
+                          🎯 <strong>Sprint 70x</strong>
+                        <% } else if(bet.game_type_id == 3) { %>
+                          🎯 <strong>Mid-Day 40x</strong>
+                        <% } %>
                         </span>
                       </td>
 
                       <!-- Choice -->
                       <td>
-                        <% if (bet.chosen_number) { %>
+                        <% if (bet.game_type_id == 1) { %>
                           🎯 <strong><%= bet.chosen_number %></strong>
-                        <% } else { %>
-                          🎨 <strong><%= bet.chosen_color %></strong>
+                        <% } else if(bet.game_type_id == 3) { %>
+                          🎯 <strong><%= bet.chosen_number %></strong>
                         <% } %>
                       </td>
 

@@ -4,56 +4,58 @@ document.addEventListener("DOMContentLoaded", () => {
   const prizeSpan = document.getElementById("prizeAmount");
   const ticketError = document.getElementById("ticketError");
 
-  const ticketsSold = parseInt(document.getElementById("ticketsSold").value);
-  const userTickets = parseInt(document.getElementById("userTickets").value);
+  const ticketsSold = parseInt(document.getElementById("ticketsSold")?.value || 0);
+  const userTickets = parseInt(document.getElementById("userTickets")?.value || 0);
 
-  // 🎟 Ticket validation
-  ticketsInput.addEventListener("input", () => {
-    let tickets = parseInt(ticketsInput.value) || 0;
+  if (ticketsInput) {
+    ticketsInput.addEventListener("input", () => {
+      let tickets = parseInt(ticketsInput.value) || 0;
 
-    if (tickets > 5 || userTickets + tickets > 5 || ticketsSold + tickets > 80) {
-      ticketError.classList.remove("d-none");
-      ticketsInput.value = Math.min(5, 80 - ticketsSold);
-    } else {
-      ticketError.classList.add("d-none");
-    }
-  });
+      if (tickets > 5 || userTickets + tickets > 5 || ticketsSold + tickets > 80) {
+        ticketError.classList.remove("d-none");
+        ticketsInput.value = Math.min(5, 80 - ticketsSold);
+      } else {
+        ticketError.classList.add("d-none");
+      }
+    });
+  }
 
-  // 💰 Prize calculation
-  amountInput.addEventListener("input", () => {
-    const amount = parseInt(amountInput.value) || 0;
+  if (amountInput) {
+    amountInput.addEventListener("input", () => {
+      const amount = parseInt(amountInput.value) || 0;
+      prizeSpan.innerText = (amount >= 1 && amount <= 100) ? amount * 70 : 0;
+    });
+  }
 
-    if (amount >= 1 && amount <= 100) {
-      prizeSpan.innerText = amount * 70;
-    } else {
-      prizeSpan.innerText = 0;
-    }
-  });
-});
-
+  /* ----------------------------
+     Number Selection Logic
+  ----------------------------- */
+  const form = document.getElementById('numberGameForm');
   const buttons = document.querySelectorAll('.number-btn');
-  const hiddenInput = document.getElementById('chosenNumber');
-  const error = document.getElementById('numberError');
+  const hiddenInput = document.getElementById('chosenNumber'); // ✅ ADD THIS
+
+  let selectedNumber = null;
 
   buttons.forEach(btn => {
     btn.addEventListener('click', () => {
-
-      // remove previous selection
       buttons.forEach(b => b.classList.remove('active'));
-
-      // set active
       btn.classList.add('active');
 
-      // set value
-      hiddenInput.value = btn.dataset.number;
-      error.classList.add('d-none');
+      selectedNumber = btn.dataset.number;
+      hiddenInput.value = selectedNumber; // ✅ IMPORTANT
     });
   });
 
-  // Validate before submit
-  document.querySelector('form').addEventListener('submit', e => {
-    if (!hiddenInput.value) {
-      e.preventDefault();
-      error.classList.remove('d-none');
-    }
-  });
+  /* ----------------------------
+     Prevent Submit if No Number
+  ----------------------------- */
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      if (!hiddenInput.value) {
+        e.preventDefault();
+        alert('Please select a number before placing your bet.');
+      }
+    });
+  }
+
+});

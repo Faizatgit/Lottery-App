@@ -21,21 +21,15 @@ router.get('/play/number', ensureAuth, async (req, res) => {
 
 // Place number bet
 router.post('/play/number', ensureAuth, async (req, res) => {
-  const { chosen_number, amount, draw_id, tickets } = req.body;
+  const { chosen_number, draw_id, amount } = req.body;
   const userId = req.session.user.id;
 
   try {
     const betAmount = parseInt(amount);
-    const ticketCount = parseInt(tickets);
 
     // 1️⃣ Validation
     if (!Number.isInteger(betAmount) || betAmount < 1 || betAmount > 100) {
       req.flash('error', 'Amount must be between 1 and 100.');
-      return res.redirect('/play/number');
-    }
-
-    if (!Number.isInteger(ticketCount) || ticketCount < 1 || ticketCount > 5) {
-      req.flash('error', 'You can buy 1 to 5 tickets only.');
       return res.redirect('/play/number');
     }
 
@@ -50,9 +44,7 @@ router.post('/play/number', ensureAuth, async (req, res) => {
       [userId]
     );
 
-    const totalAmount = betAmount * ticketCount;
-
-    if (user.balance < totalAmount) {
+    if (user.balance < betAmount) {
       req.flash('error', 'Insufficient balance.');
       return res.redirect('/play/number');
     }
@@ -65,7 +57,7 @@ router.post('/play/number', ensureAuth, async (req, res) => {
       [userId, draw_id]
     );
 
-    if (userTicketData.count + ticketCount > 5) {
+    if (userTicketData.count >= 5) {
       req.flash('error', 'You can buy max 5 tickets per draw.');
       return res.redirect('/play/number');
     }
@@ -78,32 +70,29 @@ router.post('/play/number', ensureAuth, async (req, res) => {
       [draw_id]
     );
 
-    if (drawTicketData.count + ticketCount > 80) {
+    if (drawTicketData.count >= 80) {
       req.flash('error', 'All tickets sold for this draw.');
       return res.redirect('/play/number');
     }
 
     // 5️⃣ Insert tickets
     const payout = betAmount * 70;
-
-    for (let i = 0; i < ticketCount; i++) {
-      await db.query(
-        `INSERT INTO bets
-        (user_id, draw_id, amount, chosen_number, status, payout)
-        VALUES (?, ?, ?, ?, 'PENDING', ?)`,
-        [userId, draw_id, betAmount, chosen_number, payout]
-      );
-    }
+    await db.query(
+      `INSERT INTO bets
+      (user_id, draw_id, amount, chosen_number, status, payout, game_type_id)
+      VALUES (?, ?, ?, ?, 'PENDING', ?, 1)`,
+      [userId, draw_id, betAmount, chosen_number, payout]
+    );
 
     // 6️⃣ Deduct balance
     await db.query(
       'UPDATE users SET balance = balance - ? WHERE id = ?',
-      [totalAmount, userId]
+      [betAmount, userId]
     );
 
     req.flash(
       'success',
-      `Bet placed! ${ticketCount} ticket(s) purchased. Win amount per ticket: AED ${payout}`
+      `Bet placed! 1 ticket(s) purchased. Win amount per ticket: AED ${payout}`
     );
     res.redirect('/play/number');
 
@@ -198,21 +187,15 @@ router.get('/play/numberGame2', ensureAuth, async (req, res) => {
 });
 
 router.post('/play/numberGame2', ensureAuth, async (req, res) => {
-  const { chosen_number, amount, draw_id, tickets } = req.body;
+  const { draw_id, chosen_number, amount } = req.body;
   const userId = req.session.user.id;
 
   try {
     const betAmount = parseInt(amount);
-    const ticketCount = parseInt(tickets);
 
     // 🔒 Validations
     if (!Number.isInteger(betAmount) || betAmount < 2 || betAmount > 200) {
       req.flash('error', 'Amount must be between AED 2 and 200.');
-      return res.redirect('/play/numberGame2');
-    }
-
-    if (!Number.isInteger(ticketCount) || ticketCount < 1 || ticketCount > 5) {
-      req.flash('error', 'Max 5 tickets allowed.');
       return res.redirect('/play/numberGame2');
     }
 
@@ -227,9 +210,7 @@ router.post('/play/numberGame2', ensureAuth, async (req, res) => {
       [userId]
     );
 
-    const totalAmount = betAmount * ticketCount;
-
-    if (user.balance < totalAmount) {
+    if (user.balance < betAmount) {
       req.flash('error', 'Insufficient balance.');
       return res.redirect('/play/numberGame2');
     }
@@ -241,7 +222,7 @@ router.post('/play/numberGame2', ensureAuth, async (req, res) => {
       [userId, draw_id]
     );
 
-    if (userTickets.count + ticketCount > 5) {
+    if (userTickets.count >= 5) {
       req.flash('error', 'You can buy max 5 tickets per draw.');
       return res.redirect('/play/numberGame2');
     }
@@ -253,7 +234,7 @@ router.post('/play/numberGame2', ensureAuth, async (req, res) => {
       [draw_id]
     );
 
-    if (drawTickets.count + ticketCount > 40) {
+    if (drawTickets.count >= 40) {
       req.flash('error', 'All tickets sold for this draw.');
       return res.redirect('/play/numberGame2');
     }
@@ -261,24 +242,22 @@ router.post('/play/numberGame2', ensureAuth, async (req, res) => {
     // 💰 Insert bets
     const payout = betAmount * 40;
 
-    for (let i = 0; i < ticketCount; i++) {
-      await db.query(
+    await db.query(
         `INSERT INTO bets
-        (user_id, draw_id, amount, chosen_number, status, payout)
-        VALUES (?, ?, ?, ?, 'PENDING', ?)`,
+        (user_id, draw_id, amount, chosen_number, status, payout, game_type_id)
+        VALUES (?, ?, ?, ?, 'PENDING', ?, 3)`,
         [userId, draw_id, betAmount, chosen_number, payout]
       );
-    }
 
     // 💳 Deduct balance
     await db.query(
       'UPDATE users SET balance = balance - ? WHERE id = ?',
-      [totalAmount, userId]
+      [betAmount, userId]
     );
 
     req.flash(
       'success',
-      `Bet placed! ${ticketCount} ticket(s). Win AED ${payout} per ticket.`
+      `Bet placed! 1 ticket(s). Win AED ${payout} per ticket.`
     );
     res.redirect('/play/numberGame2');
 
