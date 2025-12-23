@@ -11,3 +11,31 @@ body {
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
+
+.number-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.number-btn {
+  background: #2c2f3f;
+  color: #fff;
+  border: 1px solid #17a2b8;
+  padding: 8px 0;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.number-btn:hover {
+  background: #17a2b8;
+  color: #000;
+}
+
+.number-btn.active {
+  background: #0dcaf0;
+  color: #000;
+  border-color: #0dcaf0;
+}

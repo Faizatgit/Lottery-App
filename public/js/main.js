@@ -30,3 +30,30 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
+  const buttons = document.querySelectorAll('.number-btn');
+  const hiddenInput = document.getElementById('chosenNumber');
+  const error = document.getElementById('numberError');
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+
+      // remove previous selection
+      buttons.forEach(b => b.classList.remove('active'));
+
+      // set active
+      btn.classList.add('active');
+
+      // set value
+      hiddenInput.value = btn.dataset.number;
+      error.classList.add('d-none');
+    });
+  });
+
+  // Validate before submit
+  document.querySelector('form').addEventListener('submit', e => {
+    if (!hiddenInput.value) {
+      e.preventDefault();
+      error.classList.remove('d-none');
+    }
+  });

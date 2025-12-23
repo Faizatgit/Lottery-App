@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="/css/styles.css">
+
 <div class="row">
   <div class="col-md-6 mx-auto">
     <div class="card bg-secondary shadow-lg border-info border-2">
@@ -22,13 +24,28 @@
 
           <input type="hidden" name="draw_id" value="<%= draw.id %>">
 
-          <!-- Number -->
-          <div class="mb-3">
-            <label class="form-label">Choose Number (1–50)</label>
-            <input type="number" min="1" max="50"
-              name="chosen_number"
-              class="form-control" required>
-          </div>
+          <!-- Choose Number -->
+<div class="mb-3">
+  <label class="form-label text-light">Choose Number (1–50)</label>
+
+  <input type="hidden" name="chosen_number" id="chosenNumber" required>
+
+  <div class="number-grid">
+    <% for (let i = 1; i <= 50; i++) { %>
+      <button
+        type="button"
+        class="number-btn"
+        data-number="<%= i %>">
+        <%= i %>
+      </button>
+    <% } %>
+  </div>
+
+  <small class="text-warning d-none" id="numberError">
+    Please select a number
+  </small>
+</div>
+
 
           <!-- Tickets -->
           <div class="mb-3">
@@ -63,3 +80,6 @@
     </div>
   </div>
 </div>
+
+
+<script src="/js/main.js"></script>
