@@ -8,8 +8,8 @@
       <div class="col-md-3">
         <label class="form-label">Game</label>
         <select name="game_type_code" class="form-select" required>
-          <option value="NUMBER">Number Game (1–100)</option>
-          <option value="NUMBER50">Number Game (1–50)</option>
+          <option value="NUMBER">Sprint 70X</option>
+          <option value="NUMBER50">Mid-Day 40x</option>
           <option value="COLOR">Color Game</option>
         </select>
       </div>
@@ -32,6 +32,7 @@
   <thead>
     <tr>
       <th>ID</th>
+      <th>Draw Code</th>
       <th>Game</th>
       <th>Draw Time</th>
       <th>Status</th>
@@ -44,6 +45,8 @@
     <% draws.forEach(d => { %>
       <tr>
         <td><%= d.id %></td>
+
+        <td><%= d.draw_code %></td>
 
         <td>
           <%= d.game_name %>

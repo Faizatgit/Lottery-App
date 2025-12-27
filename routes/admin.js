@@ -25,18 +25,69 @@ router.get('/draws', ensureAdmin, async (req, res) => {
 // Create draw
 router.post('/draws', ensureAdmin, async (req, res) => {
   const { game_type_code, draw_time } = req.body;
+
   try {
-    const [gt] = await db.query('SELECT id FROM game_types WHERE code = ?', [game_type_code]);
-    if (!gt.length) {
+    const [gtRows] = await db.query(
+      'SELECT id FROM game_types WHERE code = ?',
+      [game_type_code]
+    );
+
+    if (!gtRows.length) {
       req.flash('error', 'Invalid game type.');
       return res.redirect('/admin/draws');
     }
-    await db.query(
-      'INSERT INTO draws (game_type_id, draw_time) VALUES (?, ?)',
-      [gt[0].id, draw_time]
+
+    const gameTypeId = gtRows[0].id;
+
+    // 1️⃣ Define prefixes & starting numbers
+    const gameConfig = {
+      NUMBER: { prefix: 'SP-', start: 1001 },
+      NUMBER50: { prefix: 'MD-', start: 4001 },
+      COLOR: { prefix: 'CL-', start: 7001 }
+    };
+
+    const config = gameConfig[game_type_code];
+    if (!config) {
+      throw new Error('Unsupported game type');
+    }
+
+    // 2️⃣ Get last draw code for this game
+    const [lastDrawRows] = await db.query(
+      `
+      SELECT draw_code
+      FROM draws
+      WHERE game_type_id = ?
+        AND draw_code LIKE ?
+      ORDER BY id DESC
+      LIMIT 1
+      `,
+      [gameTypeId, `${config.prefix}%`]
     );
-    req.flash('success', 'Draw created.');
+
+    let nextNumber;
+
+    if (lastDrawRows.length) {
+      const lastCode = lastDrawRows[0].draw_code; // e.g. SP-1005
+      const lastNumber = parseInt(lastCode.replace(config.prefix, ''), 10);
+      nextNumber = lastNumber + 1;
+    } else {
+      nextNumber = config.start;
+    }
+
+    const drawCode = `${config.prefix}${nextNumber}`;
+
+    // 3️⃣ Insert draw
+    await db.query(
+      `
+      INSERT INTO draws (game_type_id, draw_time, draw_code)
+      VALUES (?, ?, ?)
+      `,
+      [gameTypeId, draw_time, drawCode]
+    );
+
+    req.flash('success', `Draw created (${drawCode}).`);
     res.redirect('/admin/draws');
+
   } catch (err) {
     console.error(err);
     req.flash('error', 'Error creating draw.');
