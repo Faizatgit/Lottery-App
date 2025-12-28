@@ -155,7 +155,7 @@ router.get('/play/myBets', ensureAuth, async (req, res) => {
 
   try {
     const [bets] = await db.query(
-      `SELECT * FROM bets WHERE user_id = ? ORDER BY placed_at DESC`,
+      `SELECT b.*, d.draw_code FROM bets AS b LEFT JOIN draws d ON b.draw_id = d.id WHERE b.user_id = ? ORDER BY placed_at DESC`,
       [userId]
     );
 

@@ -9,10 +9,17 @@
             No active draw at the moment. Please check back later.
           </p>
         <% } else { %>
-
+          <p class="text-light small text-center">Draw Code: <%= draw.draw_code %></p>  
           <p class="text-light small text-center mb-3">
             Next draw at:
-            <strong><%= new Date(draw.draw_time).toLocaleString() %></strong>
+            <strong><%= new Date(draw.draw_time).toLocaleString('en-GB', {
+              day: '2-digit',
+              month: 'short',
+              year: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit',
+              hour12: true
+            }).replace(',', ' at') %></strong>
           </p>
 
           <form action="/play/number" method="POST" id="numberGameForm">

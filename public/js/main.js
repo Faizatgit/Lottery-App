@@ -2,7 +2,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const ticketsInput = document.getElementById("tickets");
   const amountInput = document.getElementById("amount");
   const prizeSpan = document.getElementById("prizeAmount");
+  const midDayPrizeSpan = document.getElementById("midDayPrizeAmount");
   const ticketError = document.getElementById("ticketError");
+  const midDayAmountInput = document.getElementById("midDayAmount");
 
   const ticketsSold = parseInt(document.getElementById("ticketsSold")?.value || 0);
   const userTickets = parseInt(document.getElementById("userTickets")?.value || 0);
@@ -24,6 +26,13 @@ document.addEventListener("DOMContentLoaded", () => {
     amountInput.addEventListener("input", () => {
       const amount = parseInt(amountInput.value) || 0;
       prizeSpan.innerText = (amount >= 1 && amount <= 100) ? amount * 70 : 0;
+    });
+  }
+
+  if (midDayAmountInput) {
+    midDayAmountInput.addEventListener("input", () => {
+      const amount = parseInt(midDayAmountInput.value) || 0;
+      midDayPrizeSpan.innerText = (amount >= 2 && amount <= 200) ? amount * 40 : 0;
     });
   }
 
