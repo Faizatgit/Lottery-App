@@ -13,13 +13,33 @@ router.get('/', ensureAdmin, async (req, res) => {
 
 // List draws
 router.get('/draws', ensureAdmin, async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = 10; // rows per page
+  const offset = (page - 1) * limit;
+
+  // Total count
+  const [[{ total }]] = await db.query(
+    `SELECT COUNT(*) AS total FROM draws`
+  );
+
+  const totalPages = Math.ceil(total / limit);
+
+  // Paginated data
   const [rows] = await db.query(
     `SELECT d.*, gt.name AS game_name, gt.code
      FROM draws d
      JOIN game_types gt ON d.game_type_id = gt.id
-     ORDER BY d.draw_time DESC`
+     ORDER BY d.draw_time DESC
+     LIMIT ? OFFSET ?`,
+    [limit, offset]
   );
-  res.render('admin/draws', { title: 'Manage Draws', draws: rows });
+
+  res.render('admin/draws', {
+    title: 'Manage Draws',
+    draws: rows,
+    currentPage: page,
+    totalPages
+  });
 });
 
 // Create draw
@@ -160,6 +180,27 @@ router.post('/draws/:id/close', ensureAdmin, async (req, res) => {
   } catch (err) {
     console.error(err);
     req.flash('error', 'Error closing draw.');
+    res.redirect('/admin/draws');
+  }
+});
+
+router.get('/bets/:drawId', ensureAdmin, async (req, res) => {
+  const drawId = req.params.drawId;
+
+  try {
+    const [drawRows] = await db.query(
+      `SELECT b.*, u.name AS username, d.draw_code
+       FROM bets AS b
+       LEFT JOIN users AS u ON b.user_id = u.id
+       LEFT JOIN draws AS d ON b.draw_id = d.id
+       WHERE b.draw_id = ?`,
+      [drawId]
+    );
+
+    res.render('admin/bets', { title: 'View Bets', bets: drawRows });
+  } catch (err) {
+    console.error(err);
+    req.flash('error', 'Error fetching bets.');
     res.redirect('/admin/draws');
   }
 });
